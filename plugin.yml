@@ -1,0 +1,27 @@
+name: MauWars
+author: Tulir293
+main: net.maunium.bukkit.MauWars.MauWars
+website: http://maunium.net
+version: 1.0-A1
+depend: [MauBukLib]
+softdepend: [MauPortals]
+commands:
+  mauwars:
+    description: Main command for joining and leaving.
+    permission: mauwars.play
+    permission-message: "§4[§cMauWars§4]§c You do not have <permission>"
+    usage: "§4[§cMauWars§4]§c Usage: /<command> <join/leave> [arena/-]"
+    aliases: [wars, mw, w, skywars, sw, mauskywars, msw]
+  mauwarsadmin:
+    description: Administre MauWars
+    permission: mauwars.admin
+    permission-message: "§4[§cMauWars§4]§c You do not have <permission>"
+    usage: "§4[§cMauWars§4]§c Usage: /<command> <tpworld/pos1/pos2/addcc/create/remove/addspawn> [chance/name]"
+    aliases: [warsadmin, mwa, wa, skywarsadmin, swa, mauskywarsadmin, mswa, mwadmin, wadmin, swadmin, mswadmin]
+permissions:
+  mauwars.play:
+    description: Play MauWars
+    default: true
+  mauwars.admin:
+    description: Administre MauWars
+    default: OP

@@ -1,0 +1,40 @@
+# match.<join/leave>.[state]
+# Argument 0: Player name
+# Argument 1: Players left
+# Argument 2: Max players
+match.leave.playing=&6{0}&7 lähti pelistä! &6{1}&7 pelaajaa jäljellä.
+match.leave.waiting=&6{0}&7 lähti pelistä! &6{1}&7 / &6{2}&7 pelaajaa.
+match.leave.resetting=&6{0}&7 lähti pelistä!
+match.join=&6{0}&7 liittyi peliin! &6{1}&7 / &6{2}&7 pelaajaa.
+
+# Argument 0: Player name
+# Argument 1: Map name
+match.end=&6{0}&7 voitti mapissa &6{1}&7!
+
+join.noarenas=No joinable arenas found!
+join.started=That map is already in-game!
+join.disabled=That map has been disabled!
+join.nospace=There is no space in that map!
+leave.notinarena=You're not in a MauWars match!
+
+# Argument 0: Map name
+spawn.added=Added spawn point to the arena &6{0}&7.
+arena.notfound=Couldn't find the arena &6{0}&c!
+
+# Argument 0: Corner number
+creating.pos=Set selection corner #{0} to your location.
+
+# Argument 0: Command label
+creating.selection=Please select an area with /{0} <pos1/pos2> first.
+
+# Argument 0: Map name
+creating.backuping=Copying arena to backup world...
+creating.backuped=Backed up arena &6{0}&7.
+creating.ed=Created arena &6{0}&7.
+
+# Argument 0: Seconds left
+start.seconds=Match starting in &6{0}&7 seconds!
+start.now=The match has started. Good luck!
+
+cc.added=Added the item in your hand as a possible chest content #{0}
+cc.nfe=The second argument must be a double.
