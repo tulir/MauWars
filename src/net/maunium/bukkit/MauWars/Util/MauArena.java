@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -25,8 +26,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 import net.maunium.bukkit.MauBukLib.Area;
 import net.maunium.bukkit.MauBukLib.MauUtils;
 import net.maunium.bukkit.MauWars.MauWars;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class MauArena {
 	public static MauWars plugin;
