@@ -9,9 +9,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.metadata.MetadataValue;
 
-import net.maunium.bukkit.MauBukLib.MauUtils;
 import net.maunium.bukkit.MauWars.MauWars;
 import net.maunium.bukkit.MauWars.Util.MauArena;
+import net.maunium.bukkit.Maussentials.Utils.MetadataUtils;
 
 public class BlockListener implements Listener {
 	private MauWars plugin;
@@ -37,7 +37,7 @@ public class BlockListener implements Listener {
 		if (l.getWorld().equals(plugin.getBackupWorld())) return 0;
 		else if (l.getWorld().equals(plugin.getGameWorld())) {
 			if (p.hasMetadata(plugin.arenaMeta)) {
-				MetadataValue mv = MauUtils.getMetadata(p, plugin.arenaMeta, plugin);
+				MetadataValue mv = MetadataUtils.getMetadata(p, plugin.arenaMeta, plugin);
 				if (mv == null || mv.value() == null || !(mv.value() instanceof String)) {
 					if (!p.hasPermission("mauwars.admin")) return 0;
 					else return 1;

@@ -17,7 +17,7 @@ public class MWPortalHandler implements PortalHandler {
 		MauArena ma = plugin.getFullest();
 		if(ma != null) ma.join(p);
 		else {
-			p.sendMessage(plugin.errtag + plugin.format("join.noarenas"));
+			p.sendMessage(plugin.errtag + plugin.translate("join.noarenas"));
 			if(plugin.getSpawn() != null) p.teleport(plugin.getSpawn());
 		}
 	}

@@ -18,8 +18,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.maunium.bukkit.MauBukLib.I18n;
-import net.maunium.bukkit.MauBukLib.MauUtils;
 import net.maunium.bukkit.MauWars.Commands.CommandMauwars;
 import net.maunium.bukkit.MauWars.Commands.CommandMauwarsAdmin;
 import net.maunium.bukkit.MauWars.Listeners.BlockListener;
@@ -33,18 +31,21 @@ import net.maunium.bukkit.MauWars.Util.ChestContentHandler;
 import net.maunium.bukkit.MauWars.Util.MauArena;
 import net.maunium.bukkit.MauWars.Util.MauArena.ArenaFormatException;
 import net.maunium.bukkit.MauWars.World.WorldManager;
+import net.maunium.bukkit.Maussentials.Utils.I18n;
+import net.maunium.bukkit.Maussentials.Utils.SerializableLocation;
 
 public class MauWars extends JavaPlugin {
 	
 	public String version;
-	public final String name = "MauWars", author = "Tulir293", stag = ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + name + ChatColor.DARK_GREEN + "] " + ChatColor.GRAY, errtag = ChatColor.DARK_RED
-			+ "[" + ChatColor.RED + name + ChatColor.DARK_RED + "] " + ChatColor.RED, arenaMeta = "MauWars_CurrentArena", pos1_meta = "MauWars_Selection_Pos1", pos2_meta = "MauWars_Selection_Pos2";
+	public final String name = "MauWars", author = "Tulir293", stag = ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + name + ChatColor.DARK_GREEN + "] "
+			+ ChatColor.GRAY, errtag = ChatColor.DARK_RED + "[" + ChatColor.RED + name + ChatColor.DARK_RED + "] " + ChatColor.RED,
+			arenaMeta = "MauWars_CurrentArena", pos1_meta = "MauWars_Selection_Pos1", pos2_meta = "MauWars_Selection_Pos2";
 	private I18n i18n;
 	private WorldManager wm;
 	private ChestContentHandler cch;
 	private PhysicsListener phl;
 	private Map<String, MauArena> arenas;
-	private File arenaDir = new File(this.getDataFolder(), "arenas");
+	private File arenaDir = new File(getDataFolder(), "arenas");
 	private Random r = new Random(System.nanoTime());
 	private Location spawn;
 	
@@ -62,8 +63,8 @@ public class MauWars extends JavaPlugin {
 	public void onEnable() {
 		// Start enable
 		long st = System.currentTimeMillis();
-		version = this.getDescription().getVersion();
-		this.saveDefaultConfig();
+		version = getDescription().getVersion();
+		saveDefaultConfig();
 		
 		try {
 			Class.forName("net.maunium.bukkit.MauBukLib.Area");
@@ -85,8 +86,8 @@ public class MauWars extends JavaPlugin {
 		if (!arenaDir.exists()) arenaDir.mkdirs();
 		
 		// Save default (non-overridable) language files
-		this.saveResource("en_US.lang", true);
-		this.saveResource("fi_FI.lang", true);
+		saveResource("en_US.lang", true);
+		saveResource("fi_FI.lang", true);
 		
 		// Load selected language.
 		try {
@@ -97,15 +98,15 @@ public class MauWars extends JavaPlugin {
 		}
 		
 		// Register events
-		this.getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
-		this.getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
-		this.getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-		this.getServer().getPluginManager().registerEvents(new BlockListener(this), this);
-		this.getServer().getPluginManager().registerEvents(this.phl = new PhysicsListener(), this);
+		getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
+		getServer().getPluginManager().registerEvents(phl = new PhysicsListener(), this);
 		
 		// Register commands
-		this.getCommand("mauwars").setExecutor(new CommandMauwars(this));
-		this.getCommand("mauwarsadmin").setExecutor(new CommandMauwarsAdmin(this));
+		getCommand("mauwars").setExecutor(new CommandMauwars(this));
+		getCommand("mauwarsadmin").setExecutor(new CommandMauwarsAdmin(this));
 		
 		// Load game and backup worlds.
 		wm.loadWorlds();
@@ -126,7 +127,7 @@ public class MauWars extends JavaPlugin {
 			}
 		}
 		
-		spawn = MauUtils.parseLocation(getConfig().getString("server-spawn"));
+		spawn = SerializableLocation.fromString(getConfig().getString("server-spawn")).toLocation();
 		
 		// End enable
 		int et = (int) (System.currentTimeMillis() - st);
@@ -165,7 +166,7 @@ public class MauWars extends JavaPlugin {
 		return wm.getBackupWorld();
 	}
 	
-	public ChestContentHandler getChestContentHandler(){
+	public ChestContentHandler getChestContentHandler() {
 		return cch;
 	}
 	
@@ -173,7 +174,7 @@ public class MauWars extends JavaPlugin {
 		return arenas.get(name.toLowerCase(Locale.ENGLISH));
 	}
 	
-	public PhysicsListener getPhysicsListener(){
+	public PhysicsListener getPhysicsListener() {
 		return phl;
 	}
 	
@@ -219,7 +220,7 @@ public class MauWars extends JavaPlugin {
 		return spawn;
 	}
 	
-	public String format(String s, Object... args) {
-		return i18n.format(s, args);
+	public String translate(String s, Object... args) {
+		return i18n.translate(s, args);
 	}
 }

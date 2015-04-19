@@ -4,12 +4,12 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 
-import net.maunium.bukkit.MauBukLib.IngameCommandExecutor;
-import net.maunium.bukkit.MauBukLib.MauUtils;
 import net.maunium.bukkit.MauWars.MauWars;
 import net.maunium.bukkit.MauWars.Util.MauArena;
+import net.maunium.bukkit.Maussentials.Utils.IngameCommandExecutor;
+import net.maunium.bukkit.Maussentials.Utils.MetadataUtils;
 
-public class CommandMauwars extends IngameCommandExecutor {
+public class CommandMauwars implements IngameCommandExecutor {
 	private MauWars plugin;
 	
 	public CommandMauwars(MauWars plugin) {
@@ -24,26 +24,26 @@ public class CommandMauwars extends IngameCommandExecutor {
 					MauArena ma = plugin.getArena(args[1]);
 					if (ma != null) {
 						int i = ma.join(p);
-						if (i == -1) p.sendMessage(plugin.errtag + plugin.format("join.disabled", ma.getName()));
-						else if (i == -2) p.sendMessage(plugin.errtag + plugin.format("join.started", ma.getName()));
-						else if (i == -3) p.sendMessage(plugin.errtag + plugin.format("join.nospace", ma.getName()));
-					} else p.sendMessage(plugin.errtag + plugin.format("arena.notfound", args[1]));
+						if (i == -1) p.sendMessage(plugin.errtag + plugin.translate("join.disabled", ma.getName()));
+						else if (i == -2) p.sendMessage(plugin.errtag + plugin.translate("join.started", ma.getName()));
+						else if (i == -3) p.sendMessage(plugin.errtag + plugin.translate("join.nospace", ma.getName()));
+					} else p.sendMessage(plugin.errtag + plugin.translate("arena.notfound", args[1]));
 				} else {
 					MauArena ma = plugin.getFullest();
 					if (ma != null) ma.join(p);
-					else p.sendMessage(plugin.errtag + plugin.format("join.noarenas"));
+					else p.sendMessage(plugin.errtag + plugin.translate("join.noarenas"));
 				}
 				return true;
 			} else if (args[0].equalsIgnoreCase("leave")) {
 				if (p.hasMetadata(plugin.arenaMeta)) {
-					MetadataValue mv = MauUtils.getMetadata(p, plugin.arenaMeta, plugin);
+					MetadataValue mv = MetadataUtils.getMetadata(p, plugin.arenaMeta, plugin);
 					if (mv == null || mv.value() == null || !(mv.value() instanceof String)) {
-						p.sendMessage(plugin.errtag + plugin.format("leave.notinarena"));
+						p.sendMessage(plugin.errtag + plugin.translate("leave.notinarena"));
 						return true;
 					}
 					MauArena ma = plugin.getArena((String) mv.value());
 					if (ma != null) ma.leave(p);
-					else p.sendMessage(plugin.errtag + plugin.format("leave.notinarena"));
+					else p.sendMessage(plugin.errtag + plugin.translate("leave.notinarena"));
 				}
 				return true;
 			}

@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
 
-import net.maunium.bukkit.MauBukLib.Area;
+import net.maunium.bukkit.Maussentials.Utils.Area;
 
 public class PhysicsListener implements Listener {
 	private HashMap<Area, World> disabledPhysics = new HashMap<Area, World>();

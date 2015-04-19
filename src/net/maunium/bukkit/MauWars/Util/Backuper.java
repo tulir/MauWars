@@ -4,8 +4,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import net.maunium.bukkit.MauBukLib.Area;
 import net.maunium.bukkit.MauWars.MauWars;
+import net.maunium.bukkit.Maussentials.Utils.Area;
 
 public class Backuper {
 	private MauWars plugin;
@@ -15,7 +15,7 @@ public class Backuper {
 	public Backuper(MauWars plugin, MauArena ma, Player p, boolean addArena) {
 		this.plugin = plugin;
 		this.addArena = addArena;
-		p.sendMessage(plugin.stag + plugin.format("creating.backuping", ma.getName()));
+		p.sendMessage(plugin.stag + plugin.translate("creating.backuping", ma.getName()));
 		taskId = plugin.getServer().getScheduler().runTaskTimer(plugin, new BackupTask(ma, p), 1, 3).getTaskId();
 	}
 	
@@ -31,7 +31,7 @@ public class Backuper {
 			ma.disable();
 			plugin.getPhysicsListener().disablePhysics(ma.getMap(), backup);
 			this.p = p;
-			this.y = ma.getMap().getMaxY();
+			y = ma.getMap().getMaxY();
 		}
 		
 		@SuppressWarnings("deprecation")
@@ -52,10 +52,10 @@ public class Backuper {
 				if (addArena) {
 					plugin.addArena(ma);
 					plugin.getLogger().info("Added arena " + ma.getName());
-					if (p != null) p.sendMessage(plugin.stag + plugin.format("creating.ed", ma.getName()));
+					if (p != null) p.sendMessage(plugin.stag + plugin.translate("creating.ed", ma.getName()));
 				} else {
 					plugin.getLogger().info("Backed up arena " + ma.getName());
-					if (p != null) p.sendMessage(plugin.stag + plugin.format("creating.backuped", ma.getName()));
+					if (p != null) p.sendMessage(plugin.stag + plugin.translate("creating.backuped", ma.getName()));
 				}
 				plugin.getPhysicsListener().enablePhysics(ma.getMap());
 				ma.enable();

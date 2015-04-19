@@ -6,9 +6,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.MetadataValue;
 
-import net.maunium.bukkit.MauBukLib.MauUtils;
 import net.maunium.bukkit.MauWars.MauWars;
 import net.maunium.bukkit.MauWars.Util.MauArena;
+import net.maunium.bukkit.Maussentials.Utils.MetadataUtils;
 
 public class PlayerDeathListener implements Listener {
 	private MauWars plugin;
@@ -19,11 +19,11 @@ public class PlayerDeathListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDeath(PlayerDeathEvent evt) {
-		if(evt.getEntity().hasMetadata(plugin.arenaMeta)){
-			MetadataValue mv = MauUtils.getMetadata(evt.getEntity(), plugin.arenaMeta, plugin);
-			if(mv == null || mv.value() == null || !(mv.value() instanceof String)) return;
+		if (evt.getEntity().hasMetadata(plugin.arenaMeta)) {
+			MetadataValue mv = MetadataUtils.getMetadata(evt.getEntity(), plugin.arenaMeta, plugin);
+			if (mv == null || mv.value() == null || !(mv.value() instanceof String)) return;
 			MauArena ma = plugin.getArena((String) mv.value());
-			if(ma != null) ma.dead(evt.getEntity(), evt.getDeathMessage());
+			if (ma != null) ma.dead(evt.getEntity(), evt.getDeathMessage());
 			evt.setDeathMessage(null);
 		}
 	}

@@ -23,9 +23,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import net.maunium.bukkit.MauBukLib.Area;
-import net.maunium.bukkit.MauBukLib.MauUtils;
 import net.maunium.bukkit.MauWars.MauWars;
+import net.maunium.bukkit.Maussentials.Utils.Area;
+import net.maunium.bukkit.Maussentials.Utils.SerializableLocation;
 
 public class MauArena {
 	public static MauWars plugin;
@@ -42,9 +42,9 @@ public class MauArena {
 		this.name = name;
 		this.map = map;
 		this.spawnpoints = spawnpoints;
-		this.players = new UUID[spawnpoints.size()];
+		players = new UUID[spawnpoints.size()];
 		Arrays.fill(players, null);
-		this.state = State.WAITING;
+		state = State.WAITING;
 	}
 	
 	public void broadcast(String s) {
@@ -67,7 +67,7 @@ public class MauArena {
 		// Check that player is not null
 		if (p == null) throw new NullPointerException("The player may not be null!");
 		// Make sure that the game is in the lobby
-		if (!this.getState().equals(State.WAITING)) return -2;
+		if (!getState().equals(State.WAITING)) return -2;
 		// Loop through the player array to find a slot for the player.
 		for (int i = 0; i < players.length; i++) {
 			// If there's no one in the slot.
@@ -79,7 +79,7 @@ public class MauArena {
 				// Teleport the player to the correct spawn point.
 				p.teleport(spawnpoints.get(i));
 				// Broadcast player joining
-				broadcast(plugin.stag + plugin.format("match.join", p.getName(), getPlayerCount(), spawnpoints.size()));
+				broadcast(plugin.stag + plugin.translate("match.join", p.getName(), getPlayerCount(), spawnpoints.size()));
 				// If there is more than 1 player, reset and/or activate the startup countdown.
 				if (getPlayerCount() > 1) activateCountdown();
 				// Finally return the player slot ID.
@@ -114,7 +114,8 @@ public class MauArena {
 				p.getInventory().setContents(new ItemStack[p.getInventory().getContents().length]);
 				p.getInventory().setArmorContents(new ItemStack[p.getInventory().getArmorContents().length]);
 				// Broadcast player leaving.
-				broadcast(plugin.stag + plugin.format("match.leave." + getState().toString().toLowerCase(Locale.ENGLISH), p.getName(), getPlayerCount(), spawnpoints.size()));
+				broadcast(plugin.stag
+						+ plugin.translate("match.leave." + getState().toString().toLowerCase(Locale.ENGLISH), p.getName(), getPlayerCount(), spawnpoints.size()));
 				// If the match is in PLAYING state and there is only 1 player left, end the match.
 				if (getState().equals(State.PLAYING) && getPlayerCount() < 2) end();
 				// If the match is in WAITING state and there is only 1 player left, deactivate the countdown.
@@ -227,9 +228,9 @@ public class MauArena {
 		
 		@Override
 		public void run() {
-			if (seconds > 0) broadcast(plugin.stag + plugin.format("start.seconds", seconds));
+			if (seconds > 0) broadcast(plugin.stag + plugin.translate("start.seconds", seconds));
 			else {
-				broadcast(plugin.stag + plugin.format("start.now"));
+				broadcast(plugin.stag + plugin.translate("start.now"));
 				state = State.PLAYING;
 				for (Location l : spawnpoints)
 					l.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR);
@@ -249,7 +250,7 @@ public class MauArena {
 		
 		if (pp != null) {
 			Player ppp = plugin.getServer().getPlayer(pp);
-			plugin.getServer().broadcastMessage(plugin.stag + plugin.format("match.end", ppp.getName(), name));
+			plugin.getServer().broadcastMessage(plugin.stag + plugin.translate("match.end", ppp.getName(), name));
 			ppp.removeMetadata(plugin.arenaMeta, plugin);
 			// Clear inventory
 			ppp.getInventory().setContents(new ItemStack[ppp.getInventory().getContents().length]);
@@ -261,7 +262,7 @@ public class MauArena {
 	
 	public void start() {
 		if (disabled) return;
-		this.state = State.PLAYING;
+		state = State.PLAYING;
 		for (Location l : spawnpoints)
 			l.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR);
 		broadcast(plugin.stag + "The game has started!");
@@ -280,7 +281,8 @@ public class MauArena {
 	
 	public State getState() {
 		if (state.equals(State.RESETTING)) {
-			if (copyTaskId != -1 && !plugin.getServer().getScheduler().isQueued(copyTaskId) && !plugin.getServer().getScheduler().isCurrentlyRunning(copyTaskId)) {
+			if (copyTaskId != -1 && !plugin.getServer().getScheduler().isQueued(copyTaskId)
+					&& !plugin.getServer().getScheduler().isCurrentlyRunning(copyTaskId)) {
 				state = State.WAITING;
 				copyTaskId = -1;
 			}
@@ -315,12 +317,12 @@ public class MauArena {
 				}
 			}
 		} else return false;
-		this.disabled = true;
+		disabled = true;
 		return true;
 	}
 	
 	public void enable() {
-		this.disabled = false;
+		disabled = false;
 	}
 	
 	public boolean isDisabled() {
@@ -336,7 +338,7 @@ public class MauArena {
 		conf.set("name", name);
 		List<String> list = new ArrayList<String>(spawnpoints.size());
 		for (Location l : spawnpoints)
-			list.add(MauUtils.toString(l));
+			list.add(new SerializableLocation(l).toString());
 		conf.set("spawns", list);
 		conf.set("area", map);
 		conf.set("disabled", disabled);
@@ -364,7 +366,7 @@ public class MauArena {
 		if (spawns == null || spawns.isEmpty()) throw new ArenaFormatException("Could not find a valid spawns object in the configuration.");
 		List<Location> spawnpoints = new ArrayList<Location>();
 		for (String s : spawns)
-			spawnpoints.add(MauUtils.parseLocation(s));
+			spawnpoints.add(SerializableLocation.fromString(s).toLocation());
 		
 		MauArena ma = new MauArena(name, area, spawnpoints);
 		
@@ -378,7 +380,7 @@ public class MauArena {
 	 */
 	
 	public void reset(Player p) {
-		this.state = State.RESETTING;
+		state = State.RESETTING;
 		copyTaskId = plugin.getServer().getScheduler().runTaskTimer(plugin, new Reset(p), 1, 3).getTaskId();
 		
 		players = new UUID[spawnpoints.size()];
@@ -397,7 +399,7 @@ public class MauArena {
 		
 		public Reset(Player p) {
 			this.p = p;
-			if (p != null) p.sendMessage(plugin.stag + plugin.format("creating.resetting", getName()));
+			if (p != null) p.sendMessage(plugin.stag + plugin.translate("creating.resetting", getName()));
 			plugin.getPhysicsListener().disablePhysics(getMap(), game);
 		}
 		
@@ -419,7 +421,7 @@ public class MauArena {
 			y--;
 			if (y < map.getMinY()) {
 				plugin.getServer().getScheduler().cancelTask(copyTaskId);
-				if (p != null) p.sendMessage(plugin.stag + plugin.format("creating.resetted", getName()));
+				if (p != null) p.sendMessage(plugin.stag + plugin.translate("creating.resetted", getName()));
 				plugin.getPhysicsListener().enablePhysics(getMap());
 			}
 		}
