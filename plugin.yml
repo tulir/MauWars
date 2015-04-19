@@ -2,8 +2,8 @@ name: MauWars
 author: Tulir293
 main: net.maunium.bukkit.MauWars.MauWars
 website: http://maunium.net
-version: 1.0-A1
-depend: [MauBukLib]
+version: 1.1
+depend: [Maussentials]
 softdepend: [MauPortals]
 commands:
   mauwars:
